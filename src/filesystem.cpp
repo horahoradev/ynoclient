@@ -69,7 +69,7 @@ FilesystemView Filesystem::Create(StringView path) const {
 		for (const auto& comp : components) {
 			// Do not check stuff that looks like drives, such as C:, ux0: or sd:
 			// Some systems do not consider them directories
-			if (i > 0 || comp.back() != ':') {
+			if (i > 0 || (!comp.empty() && comp.back() != ':')) {
 				if (!IsDirectory(FileFinder::MakePath(dir_of_file, comp), true)) {
 					break;
 				}
@@ -243,7 +243,7 @@ Filesystem_Stream::InputStream FilesystemView::OpenFile(StringView name, Span<St
 
 Filesystem_Stream::InputStream FilesystemView::OpenFile(StringView dir, StringView name, Span<StringView> exts) const {
 	assert(fs);
-	return fs->OpenFile(MakePath(dir), name, exts);
+	return fs->OpenFile(MakePath(name), dir, exts);
 }
 
 Filesystem_Stream::InputStream FilesystemView::OpenFile(const DirectoryTree::Args &args) const {

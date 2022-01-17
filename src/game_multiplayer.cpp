@@ -343,7 +343,7 @@ namespace {
 		//puts("onopen");
 		connected = true;
 		auto& player = Main_Data::game_player;
-		TrySend(Player::emscripten_game_name + "game");
+		TrySend(Player::emscripten_game_name + "game" + str::to_string(room_id));
 		uint16_t room_id16[] = {(uint16_t)room_id};
 		TrySend((void*)room_id16, sizeof(uint16_t));
 		SendMainPlayerPos();
@@ -654,9 +654,7 @@ void Game_Multiplayer::Connect(int map_id) {
 	
 	SetConnStatusWindowText("Disconnected");
 
-	if(!connected) {
-		ConnectToGame();
-	}
+	ConnectToGame();
 	else {
 		uint16_t room_id16[] = {(uint16_t)room_id};
 		TrySend((void*)room_id16, sizeof(uint16_t));
